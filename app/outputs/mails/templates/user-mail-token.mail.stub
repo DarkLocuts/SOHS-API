@@ -1,0 +1,29 @@
+<p style="
+    margin: 0;
+    margin-top: 17px;
+    font-size: 16px;
+    font-weight: 500;
+">Hai {{name}},</p>
+
+<p style="
+    margin: 0;
+    margin-top: 17px;
+    font-weight: 500;
+    letter-spacing: 0.56px;
+">Masukkan kode dibawah ini untuk verifikasi akun kamu, jika kode tidak berhasil coba meminta untuk kirim email kembali. kode hanya bisa digunakan selama 1 jam setelah email terkirim.</p>
+
+<p style="
+    margin: 0;
+    margin-top: 40px;
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: 15px;
+    color: #5aafff;
+">{{token}}</p>
+
+<p style="
+    margin: 0;
+    margin-top: 70px;
+    font-weight: 500;
+    letter-spacing: 0.56px;
+">Demi keamanan, jangan beritahukan kode verifikasi ini kepada siapapun! Abaikan jika kamu tidak merasa melakukan pendaftaran akun</p>

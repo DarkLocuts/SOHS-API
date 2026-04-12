@@ -1,0 +1,34 @@
+import type { ControllerContext } from "elysia"
+
+export class {{ name }} {
+    // ========================================>
+    // ## Display a listing of the resource.
+    // ========================================>
+    static async index(c: ControllerContext) {
+        // something amazing
+    }
+
+
+    // =============================================>
+    // ## Store a newly created resource.
+    // =============================================>
+    static async store(c: ControllerContext) {
+        // something amazing
+    }
+
+
+    // ============================================>
+    // ## Update the specified resource.
+    // ============================================>
+    static async update(c: ControllerContext) {
+        // something amazing
+    }
+
+
+    // ===============================================>
+    // ## Remove the specified resource.
+    // ===============================================>
+    static async destroy(c: ControllerContext) {
+        // something amazing
+    }
+}

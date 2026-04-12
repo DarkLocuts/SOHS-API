@@ -1,0 +1,31 @@
+{{ marker }}
+import { Model, SoftDelete{{ import_utils }} } from '@utils'
+{{ import }}
+
+export class {{ name }} extends Model {
+    // =====================>
+    // ## Field
+    // =====================>
+{{ fields }}
+
+    @SoftDelete()
+    deleted_at!: Date
+
+
+    // =========================>
+    // ## Relations
+    // =========================>
+{{ relations }}
+
+
+    // =====================>
+    // ## Attribute
+    // =====================>
+{{ attributes }}
+
+
+    // =====================>
+    // ## Hook
+    // =====================>
+
+}
