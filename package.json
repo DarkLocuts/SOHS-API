@@ -2,15 +2,15 @@
   "name": "elysia-light",
   "version": "1.0.0",
   "scripts": {
-    "dev"           :  "concurrently --raw \"bun run --watch app/app.ts\" \"bun barrels\" \"bun start:cron\" \"bun start:queue\" \"bun start:socket\"",
-    "start"         :  "bun run app/app.ts",
-    "start:cron"    :  "bun run app/jobs/crons/worker.cron.ts",
-    "start:queue"   :  "bun run app/jobs/queues/worker.queue.ts",
-    "start:socket"  :  "bun run app/jobs/sockets/worker.socket.ts",
-    "test"          :  "bun tsc --noEmit",
-    "lint"          :  "bunx eslint app/* utils/* database/*",
-    "barrels"       :  "bun run utils/commands/barrels.ts",
-    "light"         :  "bun utils/commands/light.ts"
+    "dev": "concurrently --raw \"bun run --watch app/app.ts\" \"bun barrels\" \"bun start:cron\" \"bun start:queue\" \"bun start:socket\"",
+    "start": "bun run app/app.ts",
+    "start:cron": "bun run app/jobs/crons/worker.cron.ts",
+    "start:queue": "bun run app/jobs/queues/worker.queue.ts",
+    "start:socket": "bun run app/jobs/sockets/worker.socket.ts",
+    "test": "bun tsc --noEmit",
+    "lint": "bunx eslint app/* utils/* database/*",
+    "barrels": "bun run utils/commands/barrels.ts",
+    "light": "bun utils/commands/light.ts"
   },
   "dependencies": {
     "@clickhouse/client": "^1.13.0",
@@ -19,11 +19,12 @@
     "elysia": "latest",
     "ioredis": "^5.8.0",
     "knex": "^3.1.0",
-    "pg": "^8.16.3",
     "nodemailer": "^7.0.9",
+    "pg": "^8.16.3",
     "socket.io": "^4.8.1",
     "tsconfig-paths": "^4.2.0",
-    "validator": "^13.15.15"
+    "validator": "^13.15.15",
+    "xlsx": "^0.18.5"
   },
   "devDependencies": {
     "eslint": "^10.0.0",

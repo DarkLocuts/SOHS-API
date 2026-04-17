@@ -1,4 +1,5 @@
 import type { ControllerContext } from "elysia"
+import bcrypt from 'bcrypt';
 import { db, permission, ValidationRules } from '@utils'
 import { User } from "app/models"
 
@@ -30,16 +31,20 @@ export class UserController {
   static async store(c: ControllerContext) {
     
     c.validation<User>({
-      name  : "required",
-      email : ["required", "email"],
+      name      :  ["required", "max:200"],
+      username  :  ["required", "max:100"],
+      password  :  ["required", "max:100"],
     })
 
     const trx = await db.transaction()
 
     let record = new User();
-    
+
+    record.fill(c.body as Record<string, any>);
+    record.password = await bcrypt.hash(record.password, 10);
+
     try {
-      record = await record.pump(c.body as Record<string, any>, { trx })            
+      await record.save();       
     } catch (err) {
       await trx.rollback()
       return c.responseError(err as Error, "Create User")
@@ -58,14 +63,18 @@ export class UserController {
     let record = await User.query().findOrNotFound(c.params.id);
 
     c.validation({
-        name   :  "required",
-        email  :  "required",
+        name      :  ["required"],
+        username  :  ["required", "max:100"],
+        password  :  ["required", "max:100"],
     })
     
     const trx = await db.transaction()
 
+    record.fill(c.body as Record<string, any>);
+    record.password = await bcrypt.hash(record.password, 10);
+
     try {
-        record = await record.pump(c.body as Record<string, any>, { trx })
+        record = await record.save();
     } catch (err) {
         await trx.rollback()
         return c.responseError(err as Error, "Create User")

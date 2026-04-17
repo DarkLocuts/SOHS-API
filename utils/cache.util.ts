@@ -15,7 +15,7 @@ export const cache = {
   // ## Cache: Get cache with key
   // =============================>
   async get<T>(key: string): Promise<T | null> {
-    const cached = await redis.get(key);
+    const cached = await redis?.get(key);
     if (!cached) return null;
     try {
       return JSON.parse(cached) as T;
@@ -31,7 +31,7 @@ export const cache = {
   // =============================>
   async set(key: string, value: any, expired: number): Promise<void> {
     const ttl = expired ?? 60; 
-    await redis.set(key, JSON.stringify(value), "EX", ttl);
+    await redis?.set(key, JSON.stringify(value), "EX", ttl);
   },
 
 
@@ -41,7 +41,7 @@ export const cache = {
   // =============================>
   async clear(type: string, prefix: string) {
     const keyPrefix = `${type}:${prefix}:*`
-    const keys = await redis.keys(keyPrefix)
-    if (keys.length) await redis.del(keys)
+    const keys = await redis?.keys(keyPrefix)
+    if (keys?.length) await redis?.del(keys)
   }
 }

@@ -12,7 +12,7 @@ export const makeControllerCommand  =  new Command("make:controller")
   .argument("<name>", "Name of controller")
   .description("Create new controller")
   .action((controllerName) => {
-    const basePath = path.join(process.cwd(), "src", "controllers");
+    const basePath = path.join(process.cwd(), "controllers");
     
     if (!controllerName || controllerName.trim() === "") {
       logger.error("Controller name invalid!");

@@ -12,7 +12,7 @@ export const makeBlueprintCommand  =  new Command("make:blueprint")
   .argument("<name>", "Name of blueprint")
   .description("Create new blueprint")
   .action((name) => {
-    const basePath = path.join(process.cwd(), "src", "blueprints");
+    const basePath = path.join(process.cwd(), "blueprints");
     
     if (!name || name.trim() === "") {
       logger.error("Blueprint name invalid!");

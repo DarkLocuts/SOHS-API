@@ -25,7 +25,7 @@ export const queue = {
     const id = uniq ?? crypto.randomBytes(10).toString("hex");
     const payload = JSON.stringify({ id, payload: jobPayload });
 
-    await redis.rpush(queue.key(name), payload);
+    await redis?.rpush(queue.key(name), payload);
     return id;
   },
 
@@ -42,7 +42,7 @@ export const queue = {
       time    : new Date().toISOString(),
     };
 
-    await redis.rpush(queue.keyFailed(name), JSON.stringify(store));
+    await redis?.rpush(queue.keyFailed(name), JSON.stringify(store));
   },
 
 
@@ -53,6 +53,8 @@ export const queue = {
   async pop(name: string, direction: "front" | "back" = "front", timeout = 0) {
     const key = queue.key(name);
     const cmd = direction === "front" ? "blpop" : "brpop";
+
+    if(!redis) return null; 
 
     const result = await (redis as any)[cmd](key, timeout);
     if (!result) return null;
@@ -86,7 +88,6 @@ export const queue = {
       try {
         const tasks: Promise<void>[] = [];
 
-        // ambil beberapa job sekaligus
         for (let i = 0; i < concurrency; i++) {
           const job = await queue.pop(name, direction, 1);
           if (!job) break;
@@ -126,8 +127,8 @@ export const queue = {
   // ===========================>
   async retry(name: string) {
     const failedKey = queue.keyFailed(name);
-    const jobs = await redis.lrange(failedKey, 0, -1);
-    if (jobs.length === 0) return 0;
+    const jobs = await redis?.lrange(failedKey, 0, -1);
+    if (!jobs || jobs?.length === 0) return 0;
 
     for (const j of jobs) {
       const job = JSON.parse(j);
@@ -140,7 +141,7 @@ export const queue = {
       }
     }
 
-    await redis.del(failedKey);
+    await redis?.del(failedKey);
 
     return jobs.length;
   },

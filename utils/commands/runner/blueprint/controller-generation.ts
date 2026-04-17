@@ -31,7 +31,7 @@ export async function controllerGeneration(
     ...generateRelationValidations(relations)
   }
 
-  let stub = fs.readFileSync(path.join(process.cwd(), "src", "utils", "commands", "make", "stubs", "light-controller.stub"), "utf-8");
+  let stub = fs.readFileSync(path.join(process.cwd(), "utils", "commands", "make", "stubs", "light-controller.stub"), "utf-8");
 
   stub = stub
     .replace(/{{\s*marker\s*}}/g, marker)
@@ -185,8 +185,8 @@ function parseRoutePath(routePath: string) {
 
 
 function ensureRouteFile(file: string) {
-  const routesDir = path.join(process.cwd(), "src", "routes")
-  if (file === "index") return path.join(routesDir, "index.ts")
+  const routesDir = path.join(process.cwd(), "app", "routes")
+  if (file === "index") return path.join(routesDir, "base.routes.ts")
 
   const filePath = path.join(routesDir, `${file}.routes.ts`)
   if (fs.existsSync(filePath)) return filePath

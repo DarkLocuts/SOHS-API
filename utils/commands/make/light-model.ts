@@ -33,7 +33,7 @@ export const makeLightModel = (modelName: string) => {
   const name = conversion.strPascal(modelName)
   const filename = conversion.strSlug(modelName) + ".model.ts"
 
-  const basePath  =  path.join(process.cwd(), "src", "models");
+  const basePath  =  path.join(process.cwd(), "app", "models");
 
   if (!existsSync(basePath)) {
     mkdirSync(basePath, { recursive: true });
@@ -46,7 +46,7 @@ export const makeLightModel = (modelName: string) => {
     return;
   }
 
-  let stub = readFileSync(path.join(process.cwd(), "src", "utils", "commands", "make", "stubs", "light-model.stub"), "utf-8");
+  let stub = readFileSync(path.join(process.cwd(), "app", "utils", "commands", "make", "stubs", "light-model.stub"), "utf-8");
 
   stub = stub
     .replace(/{{\s*name\s*}}/g, name)

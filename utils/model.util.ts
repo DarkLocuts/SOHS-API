@@ -667,15 +667,47 @@ export abstract class Model {
   // ## Save with relation
   // ==========================
   async pump<T extends this>(
-    this: T,
-    payload: ModelPayload<T>,
-    options: { trx?: Knex.Transaction } = {}
-  ): Promise<T> {
+    this     :  T,
+    payload  :  ModelPayload<T> | ModelPayload<T>[],
+    options  :  { trx?: Knex.Transaction } = {}
+  ) :  Promise<T | T[]> {
 
     const isRoot = !options.trx
     const trx = options.trx ?? await db.transaction()
 
     try {
+
+      // Handle Array (Bulk)
+      if (Array.isArray(payload)) {
+        const Ctor = this.constructor as typeof Model
+        const pkName = Ctor.primaryKey ?? 'id'
+        const results: T[] = []
+
+        for (const item of payload) {
+          let instance: T | null = null
+          const pkValue = (item as any)[pkName]
+
+          if (pkValue) {
+            const row = await Ctor.query(trx).where(pkName, pkValue).first()
+
+            if (row) {
+              instance = Ctor.hydrate([row])[0] as T
+            }
+          }
+
+          if (!instance) {
+            instance = Ctor.newInstance() as T
+          }
+
+          await instance.pump(item, { trx })
+          results.push(instance)
+        }
+
+        if (isRoot) await trx.commit()
+        return results
+      }
+
+
       const ctor = this.constructor as typeof Model
       const fields = ctor.fields
       const relations = ctor.relations ?? {}
@@ -684,7 +716,7 @@ export abstract class Model {
       const nested: Record<string, any> = {}
 
       for (const key of Object.keys(payload) as Array<keyof DataShape<T>>) {
-        const value = payload[key]
+        const value = (payload as any)[key]
 
         if (fields[key as string]?.fillable) {
           flat[key] = value
@@ -696,7 +728,6 @@ export abstract class Model {
       this.fill(flat)
       await this.useTransaction(trx).save()
 
-      // 3️⃣ Simpan relasi
       for (const [name, value] of Object.entries(nested)) {
         const relDef = relations[name]
         if (!relDef) continue
@@ -713,7 +744,7 @@ export abstract class Model {
 
           for (const item of value) {
             if ((item as any)[Related.primaryKey]) {
-              const child = await Related.query(trx).where(Related.primaryKey, (item as any)[Related.primaryKey]).first()
+              const child = await Related.query(trx).where(Related.primaryKey, (item as any)[Related.primaryKey]).getFirst()
 
               if (child) {
                 await child.pump(item as any, { trx })
@@ -1157,6 +1188,8 @@ export function extendModelQuery(
     if (this._withTree && Object.keys(this._withTree).length) {
       await loadRelations(result, this.$model, this._withTree)
     }
+
+    if(!result.at(0)) return null
 
     result.at(0).__expandedAttributes = Object.keys(this._withTree || {}).filter(k => this._withTree[k]?.__attribute)
 
@@ -1914,7 +1947,7 @@ async function loadBelongsToMany(
   const parentName   =  conversion.strSnake(Parent.name)
   const relatedName  =  conversion.strSnake(Related.name)
 
-  const pivotTable    =  rel.pivotTable ?? conversion.strPlural(`${parentName}_${relatedName}`)
+  const pivotTable    =  rel.pivotTable ?? conversion.strPlural(`${parentName}_has_${relatedName}`)
   const pivotLocal    =  rel.pivotLocal ?? `${parentName}_id`
   const pivotForeign  =  rel.pivotForeign ?? `${relatedName}_id`
   const relatedTable  =  Related.getTable()
@@ -1923,14 +1956,17 @@ async function loadBelongsToMany(
 
   rel.callback?.(q)
   callback?.(q)
+  
+  q.select(`${relatedTable}.*`, `${pivotTable}.${pivotLocal} as __pivot_${pivotLocal}`)
 
-  const related = Related.hydrate(await q)
+  const rawRows = await q
+  const related = Related.hydrate(rawRows)
 
   const grouped: Record<string, any[]> = {}
 
-  for (const r of related) {
-    const pivotValue = (r as any)[pivotLocal]
-    ;(grouped[pivotValue] ??= []).push(r)
+  for (let i = 0; i < related.length; i++) {
+    const pivotValue = rawRows[i][`__pivot_${pivotLocal}`]
+    ;(grouped[pivotValue] ??= []).push(related[i])
   }
 
   rows.forEach(r => { r[name] = grouped[r[rel.localKey]] ?? [] })

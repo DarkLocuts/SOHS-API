@@ -1,11 +1,16 @@
-import {
-Elysia } from 'elysia'
+import { Elysia } from 'elysia'
 import { api, middleware } from '@utils'
 import { 
-    AuthController, 
+    AuthController,
     BaseController, 
     UserController,
+    CategoryController,
+    BrandController,
+    LocationController,
+    ProductController,
+    OpnameController,
 } from '@controllers'
+
 
 export const routes = (app: Elysia) => app.group('/api', (route) => {
     route.get('/', BaseController.index)
@@ -13,14 +18,25 @@ export const routes = (app: Elysia) => app.group('/api', (route) => {
     route.get('/accesses', BaseController.access)
     
     route.post('/login', AuthController.login)
-    route.post('/register', AuthController.register)
 
     route.use(middleware.Private)
-    
-    route.post('/verify', AuthController.verify)
+
     route.get('/me', AuthController.me)
-    route.post('/me/update', AuthController.update)
+    route.post('/me', AuthController.update)
+    route.post('/me/update-password', AuthController.updatePassword)
 
     api(route, "/users", UserController);
+    api(route, "/categories", CategoryController);
+    api(route, "/brands", BrandController);
+    api(route, "/locations", LocationController);
+
+    api(route, "/products", ProductController);
+    route.post('/products/sync', ProductController.sync);
+    route.get('/product-labels', ProductController.getLabels);
+    route.post('/product-labels', ProductController.generateLabels);
+
+    api(route, "/opnames", OpnameController);
+    route.post('/opnames/:id/labels', OpnameController.addLabels);
+
     return route;
 })

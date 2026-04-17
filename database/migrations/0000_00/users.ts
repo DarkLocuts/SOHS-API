@@ -1,26 +1,21 @@
 import type { Knex } from "knex"
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTable("users", (table) => {
+  await knex.schema.createTable("roles", (table) => {
     table.bigIncrements("id").primary()
     table.string("name").notNullable()
-    table.string("email").unique().notNullable()
-    table.string("password")
-    table.string("image")
-    table.timestamp("email_verification_at")
+    table.json("permissions").defaultTo(knex.raw(`'[]'::json`))
     table.timestamps(true, true)
     table.softDelete()
   })
 
-  await knex.schema.createTable("user_roles", (table) => {
+  await knex.schema.createTable("users", (table) => {
     table.bigIncrements("id").primary()
+    table.foreignIdFor("roles").notNullable()
     table.string("name").notNullable()
-  })
-
-  await knex.schema.createTable("user_has_user_roles", (table) => {
-    table.bigIncrements("id").primary()
-    table.foreignIdFor("users").notNullable()
-    table.foreignIdFor("user_roles").notNullable()
+    table.string("username").unique().notNullable()
+    table.string("password")
+    table.timestamps(true, true)
     table.softDelete()
   })
 
@@ -34,23 +29,6 @@ export async function up(knex: Knex): Promise<void> {
     table.timestamp("last_used_at")
     table.timestamp("expired_at")
     table.timestamps(true, true)
-    table.softDelete()
-  })
-
-  await knex.schema.createTable("user_mail_tokens", (table) => {
-    table.bigIncrements("id").primary()
-    table.foreignIdFor("users").notNullable()
-    table.string("token").unique().notNullable()
-    table.timestamp("used_at")
-    table.timestamps(true, true)
-    table.softDelete()
-  })
-
-  await knex.schema.createTable("user_permissions", (table) => {
-    table.bigIncrements("id").primary()
-    table.foreignIdFor("users").notNullable()
-    table.foreignIdFor("user_roles").notNullable()
-    table.json("permissions").defaultTo(knex.raw(`'[]'::json`))
     table.softDelete()
   })
 }

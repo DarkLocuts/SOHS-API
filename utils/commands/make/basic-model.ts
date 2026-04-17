@@ -15,7 +15,7 @@ export const makeModelCommand = new Command("make:model")
     const name = conversion.strPascal(modelName)
     const filename = conversion.strSlug(modelName) + "model.ts"
 
-    const filePath = path.join(process.cwd(), "src", "models", filename);
+    const filePath = path.join(process.cwd(), "models", filename);
 
     if (!existsSync(path.dirname(filePath))) {
       mkdirSync(path.dirname(filePath), { recursive: true });

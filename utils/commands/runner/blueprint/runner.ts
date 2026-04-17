@@ -124,7 +124,7 @@ export async function runBlueprints(options?: { only?: string[] }) {
 // ## Command: Blueprint load json files
 // =======================>
 function loadBlueprintFiles(dir = "blueprints") {
-  const basePath = path.join(process.cwd(), "src", dir)
+  const basePath = path.join(process.cwd(), dir)
 
   if (!fs.existsSync(basePath)) {
     throw new Error("Blueprint folder not found")

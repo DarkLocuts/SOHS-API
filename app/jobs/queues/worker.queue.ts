@@ -9,30 +9,30 @@ import { notificationQueueWorker } from "./notification.queue.worker";
 // ============================================>
 // ## Run of queue workers.
 // ============================================>
-queue.worker("example", async (payload, id) => {
-    logger.queue(`Start queue ${id}`)
+// queue.worker("example", async (payload, id) => {
+//     logger.queue(`Start queue ${id}`)
 
-    if (Math.random() < 0.5) {
-        logger.queueError(`Queue ${id} intentionally failed`)
-        throw new Error(`Random failure for job ${id}`)
-    }
+//     if (Math.random() < 0.5) {
+//         logger.queueError(`Queue ${id} intentionally failed`)
+//         throw new Error(`Random failure for job ${id}`)
+//     }
 
-    const wait = () => new Promise((resolve) =>
-        setTimeout(() => {
-            logger.queue("Queue payload date:" + payload?.date)
-            resolve("")
-        }, 5000)
-    )
+//     const wait = () => new Promise((resolve) =>
+//         setTimeout(() => {
+//             logger.queue("Queue payload date:" + payload?.date)
+//             resolve("")
+//         }, 5000)
+//     )
     
-    await wait()
+//     await wait()
 
-    logger.queue(`Finish queue ${id}`)
-});
+//     logger.queue(`Finish queue ${id}`)
+// });
 
-activityLogQueueWorker()
 accessLogQueueWorker()
 errorLogQueueWorker()
-notificationQueueWorker()
+// activityLogQueueWorker()
+// notificationQueueWorker()
 
 
 logger.start(`Queue job workers is running!`)

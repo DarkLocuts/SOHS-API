@@ -2,5 +2,5 @@
   "directory"  :  ["app/models", "app/controllers", "app/routes", "app/outputs/mails", "app/outputs/notifications"],
   "delete"     :  true,
   "exclude"    :  ["index.ts"],
-  "structure"  :  "recursive"
+  "structure"  :  "flat"
 }

@@ -26,7 +26,6 @@ export const makeDaMigration = (
 
   const baseDir = path.join(
     process.cwd(),
-    "src",
     "database",
     "da.migrations"
   )

@@ -1,0 +1,46 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["bugs"],
+  "properties": {
+    "bugs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "layer",
+          "type",
+          "status",
+          "source",
+          "description",
+          "related_feature"
+        ],
+        "properties": {
+          "id": { "type": "string" },
+          "layer": { "enum": ["frontend", "backend"] },
+          "type": { "enum": ["static_error", "runtime_error", "pattern"] },
+          "status": {
+            "enum": ["open", "fix", "fix_but_need_human", "need_human"]
+          },
+          "source": { "enum": ["ai", "human"] },
+          "description": { "type": "string" },
+          "related_feature": { "type": "string" },
+          "file": { "type": "string" },
+          "line": { "type": "integer" },
+          "fix": {
+            "type": "object",
+            "properties": {
+              "by": { "enum": ["ai", "human"] },
+              "files_modified": {
+                "type": "array",
+                "items": { "type": "string" }
+              },
+              "notes": { "type": "string" }
+            }
+          }
+        }
+      }
+    }
+  }
+}

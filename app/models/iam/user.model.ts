@@ -1,18 +1,21 @@
-import { Field, Model } from '@utils'
+import { BelongsTo, Field, Model } from '@utils'
+import { Role } from '@models'
 
 export class User extends Model {
     @Field(["fillable", "selectable", "searchable"])
     name!: string
 
     @Field(["fillable", "selectable", "searchable"])
-    email!: string
+    username!: string
 
     @Field(["fillable"])
     password!: string
 
-    @Field(["fillable", "selectable"])
-    image!: string
+    // =========================>
+    // ## Relations
+    // =========================>
+    role_id!: number
 
-    @Field(["fillable", "selectable", "searchable"])
-    email_verification_at!: Date
+    @BelongsTo(() => Role)
+    role!: Role
 }

@@ -1,0 +1,88 @@
+[
+    {
+        "model"   :  "inventory/product",
+        "schema"  :  {
+            "code"           :  "type:string,50 required unique index fillable searchable selectable",
+            "name"           :  "type:string,200 required fillable searchable selectable",
+            "stock"          :  "type:integer default:0 fillable selectable",
+            "last_sequence"  :  "type:integer default:0 fillable selectable"
+        },
+        "relations": {
+            "category": "Category",
+            "brand"   : "Brand"
+        },
+        "controllers": ["inventory/product products 200:product"]
+    },
+    {
+        "model"   :  "inventory/category",
+        "schema"  :  {
+            "name" : "type:string,200 required min:1 max:200 unique index fillable searchable selectable"
+        },
+        "controllers": ["inventory/category categories 201:category"]
+    },
+    {
+        "model"   :  "inventory/brand",
+        "schema"  :  {
+            "name" : "type:string,200 required min:1 max:200 unique index fillable searchable selectable"
+        },
+        "controllers": ["inventory/brand brands 202:brand"]
+    },
+    {
+        "model"   :  "inventory/location",
+        "schema"  :  {
+            "name" : "type:string,200 required min:1 max:200 fillable searchable selectable",
+            "zone" : "type:string,100 required fillable searchable selectable",
+            "code" : "type:string,50 required unique index fillable searchable selectable"
+        },
+        "controllers": ["inventory/location locations 203:location"]
+    },
+    {
+        "model"   :  "inventory/location-label",
+        "schema"  :  {
+            "sequence"     :  "type:integer required fillable selectable"
+        },
+        "relations": {
+            "location": "Location"
+        },
+        "controllers": false
+    },
+    {
+        "model"   :  "inventory/product-location",
+        "schema"  :  {
+            "stock"  :  "type:integer default:0 fillable selectable"
+        },
+        "relations": {
+            "product": "Product",
+            "location": "Location"
+        },
+        "controllers": false
+    },
+    {
+        "model"   :  "inventory/product-label",
+        "schema"  :  {
+            "sequence"  :  "type:integer required fillable selectable"
+        },
+        "relations": {
+            "product": "Product",
+            "location": "Location"
+        },
+        "controllers": false
+    },
+    {
+        "model"   :  "inventory/product-sync-log",
+        "schema"  :  {
+            "file_name"               :  "type:string,255 required fillable searchable selectable",
+            "file_size"               :  "type:bigInteger unsigned required fillable selectable",
+            "total_rows"              :  "type:integer nullable fillable selectable",
+            "total_new_products"      :  "type:integer default:0 fillable selectable",
+            "total_updated_products"  :  "type:integer default:0 fillable selectable",
+            "total_errors"            :  "type:integer default:0 fillable selectable",
+            "status"                  :  "type:string,50 required index fillable selectable",
+            "uploaded_by"             :  "type:bigInteger unsigned index nullable fillable selectable"
+        },
+        "relations": {
+            "uploaded_by": "User"
+        },
+        "controllers": false
+    }
+]

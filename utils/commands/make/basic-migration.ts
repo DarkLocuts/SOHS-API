@@ -31,7 +31,6 @@ export const makeMigration = (
 
   const baseDir = path.join(
     process.cwd(),
-    "src",
     "database",
     "migrations"
   )

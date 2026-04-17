@@ -40,11 +40,11 @@ if (process.env.DA_HOST && process.env.DA_PORT && process.env.DA_USERNAME && pro
 // ## Init: redis
 // =====================================>
 if (process.env.REDIS_HOST && process.env.REDIS_PORT) {
-  redis.on("connect", () => {
+  redis?.on("connect", () => {
     logger.start(`Redis connected ${process.env.REDIS_HOST}:${process.env.REDIS_PORT}!`)
   })
 
-  redis.on("error", (err) => {
+  redis?.on("error", (err) => {
     const em = err instanceof Error ? err.message : String(err)
     logger.error(`Redis error: ${em}`, { error: em })
   })

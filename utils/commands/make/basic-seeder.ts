@@ -28,7 +28,7 @@ export const makeSeeder = (seederName: string, model?: string) => {
   const dir = path.resolve("seeders");
   if (!existsSync(dir)) mkdirSync(dir, { recursive: true });
 
-  const filePath = path.join(process.cwd(), "src", "database", "seeders", filename );;
+  const filePath = path.join(process.cwd(), "database", "seeders", filename );;
   
   let content  =  fs.readFileSync('./utils/commands/make/stubs/basic-seeder.stub', 'utf-8');;
       

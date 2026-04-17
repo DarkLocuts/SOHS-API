@@ -13,7 +13,7 @@ export async function seederGeneration(
 ) : Promise<boolean> {
   const modelName  =  conversion.strPascal(model?.split("/")?.pop() || "");
   const name       =  modelName + "Seeder" ;
-  const basePath   =  path.join(process.cwd(), "src", "database", "seeders");
+  const basePath   =  path.join(process.cwd(), "database", "seeders");
   const filename   =  conversion.strSlug(modelName);
   const filePath   =  path.join(basePath, `${filename}.seeder.ts`);
   
@@ -36,7 +36,7 @@ export async function seederGeneration(
       })
     .join(", ")}}`).join(",\n    ");
 
-  const stubPath = path.join(process.cwd(), "src", "utils", "commands", "make", "stubs", "light-seeder.stub");
+  const stubPath = path.join(process.cwd(), "utils", "commands", "make", "stubs", "light-seeder.stub");
   let stub = fs.readFileSync(stubPath, "utf-8");
 
   stub = stub

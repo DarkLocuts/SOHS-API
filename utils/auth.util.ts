@@ -24,11 +24,11 @@ export const auth = {
     const hash   =  await bcrypt.hash(plain, 10)
     const agent  =  generateAgentId(req)
 
-    let permissions: string[] = []
-    if (AUTH_PERMISSION && permission) {
+    let permissions: any
+    if (permission) {
       permissions = await getUserPermissions(userId)
     }
-
+    
     const [row] = await db("user_access_tokens").insert({
       user_id      :  userId,
       token        :  hash,
@@ -67,7 +67,7 @@ export const auth = {
     const cacheKey = `auth:token:${tokenId}`
 
     if (AUTH_CACHE) {
-      const cached = await redis.get(cacheKey)
+      const cached = await redis?.get(cacheKey)
 
       if (cached) {
         const session = JSON.parse(cached)
@@ -91,7 +91,7 @@ export const auth = {
     const user = await db("users").where("id", tokenRecord.user_id).first()
 
     if (AUTH_CACHE) {
-      await redis.setex(
+      await redis?.setex(
         cacheKey,
         AUTH_CACHE_TTL,
         JSON.stringify({
@@ -199,17 +199,11 @@ function getRequestIp(req: Request) {
 
 
 async function getUserPermissions(userId: number): Promise<string[]> {
-  const roleIds = await db("user_roles").where("user_id", userId).pluck("role_id")
+  const user = await db("users").where("id", userId).select("role_id").first()
 
-  if (roleIds.length === 0) return []
-
-  const rows = await db("permissions").whereIn("role_id", roleIds).pluck("permissions")
-
-  return Array.from(
-    new Set(
-      rows.flatMap(p => p ?? [])
-    )
-  )
+  const role = await db("roles").where("id", user.role_id).select("permissions").first()
+  
+  return role.permissions
 }
 
 
@@ -227,7 +221,7 @@ async function revalidateUserPermissions(userId: number) {
 
   if (AUTH_CACHE) {
     await Promise.all(
-      tokenIds.map(id => redis.del(`auth:token:${id}`))
+      tokenIds.map(id => redis?.del(`auth:token:${id}`))
     )
   }
 }

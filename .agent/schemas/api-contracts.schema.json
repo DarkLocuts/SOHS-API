@@ -1,0 +1,30 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["api-contracts"],
+  "properties": {
+    "api-contracts": {
+      "type": "array",
+      "items": {
+        "required": ["feature_id", "endpoints"],
+        "properties": {
+          "feature_id": { "type": "string" },
+          "endpoints": {
+            "type": "array",
+            "items": {
+              "required": ["method", "path"],
+              "properties": {
+                "method": {
+                  "enum": ["GET", "POST", "PUT", "DELETE"]
+                },
+                "path": { "type": "string" },
+                "request": { "type": "object" },
+                "response": { "type": "object" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -54,10 +54,10 @@ export const middleware = {
       const result = await auth.verifyAccessToken(bearer, request)
 
       if (!result) return { user: null, permissions: [], token: null };
-
+      
       return {
         user: result.user,
-        permissions: result.permissions,
+        permissions: result?.token?.permissions,
         token: result.token,
       }
   }),

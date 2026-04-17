@@ -12,7 +12,7 @@ relations  :  Record<string, string> = {},
 marker     :  string
 )          :  Promise<boolean> {
   const name       =  conversion.strSnake(conversion.strPlural(model.split("/").pop() || ""));
-  const basePath   =  path.join(process.cwd(), "src","database", "migrations", "0000_00");
+  const basePath   =  path.join(process.cwd(),"database", "migrations", "0000_00");
   const filename   =  `${name}.ts`;
   const filePath   =  path.join(basePath, filename);
   const className  =  `create${conversion.strPascal(name)}Table`
@@ -106,7 +106,7 @@ marker     :  string
 
   const migrationSchema = migrationFields.map((f) => `    ${f}`).join("\n");
 
-  const stubPath = path.join(process.cwd(), "src", "utils", "commands", "make", "stubs", "light-migration.stub");
+  const stubPath = path.join(process.cwd(), "utils", "commands", "make", "stubs", "light-migration.stub");
   let stub = fs.readFileSync(stubPath, "utf-8");
 
   stub  =  stub

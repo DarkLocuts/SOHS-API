@@ -20,7 +20,7 @@ export const makeLightControllerCommand = new Command("make:light-controller")
 
 
 export const makeLightController = (controllerName: string, modelName?:string) => {
-  const basePath = path.join(process.cwd(), "src", "controllers");
+  const basePath = path.join(process.cwd(), "app", "controllers");
 
   if (!controllerName || controllerName.trim() === "") {
     logger.error("Controller name invalid!");
@@ -49,7 +49,7 @@ export const makeLightController = (controllerName: string, modelName?:string) =
     logger.info(`Create folder ${targetDir}...`);
   }
 
-  const stubPath = path.join(process.cwd(), "src", "utils", "commands", "make", "stubs", "light-controller.stub");
+  const stubPath = path.join(process.cwd(), "app", "utils", "commands", "make", "stubs", "light-controller.stub");
   let stub = readFileSync(stubPath, "utf-8");
 
   stub = stub.replace(

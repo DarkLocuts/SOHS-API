@@ -12,7 +12,7 @@ export const makeQueueCommand  =  new Command("make:queue")
   .argument("<name>", "Name of queue")
   .description("Create new queue")
   .action((name) => {
-    const basePath = path.join(process.cwd(), "src", "jobs", "queues");
+    const basePath = path.join(process.cwd(), "app", "jobs", "queues");
     
     if (!name || name.trim() === "") {
       logger.error("Queue name invalid!");

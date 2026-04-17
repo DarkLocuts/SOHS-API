@@ -1,0 +1,55 @@
+[
+    {
+        "model"   :  "opname/opname",
+        "schema"  :  {
+            "title"       : "type:string,200 required fillable searchable selectable",
+            "date_start"  : "type:date required fillable selectable",
+            "date_end"    : "type:date nullable fillable selectable",
+            "status"      : "type:string,50 required index fillable searchable selectable"
+        },
+        "relations": {
+            "products"    : "[]OpnameProduct",
+            "created_by"  : "User",
+            "closed_by"   : "User"
+        },
+        "controllers": ["opname/opname opnames 300:opname"]
+    },
+    {
+        "model"   :  "opname/opname-product",
+        "schema"  :  {
+            "product_code"   :  "type:string,50 required fillable searchable selectable",
+            "product_name"   :  "type:string,200 required fillable searchable selectable",
+            "initial_stock"  :  "type:integer required fillable selectable",
+            "final_stock"    :  "type:integer default:0 fillable selectable"
+        },
+        "relations": {
+            "opname"  : "Opname",
+            "labels"  : "[]OpnameProductLabel"
+        },
+        "controllers": false
+    },
+    {
+        "model"   :  "opname/opname-location",
+        "schema"  :  {
+            "location_name"  :  "type:string,200 required fillable searchable selectable",
+            "total_product"  :  "type:integer required fillable selectable"
+        },
+        "relations": {
+            "opname"  : "Opname",
+            "location" : "Location"
+        },
+        "controllers": false
+    },
+    {
+        "model"   :  "opname/opname-product-label",
+        "schema"  :  {},
+        "relations": {
+            "opname"          :  "Opname",
+            "opname_product"  :  "OpnameProduct",
+            "product"         :  "Product",
+            "label"           :  "ProductLabel",
+            "location"        :  "Location"
+        },
+        "controllers": false
+    }
+]
