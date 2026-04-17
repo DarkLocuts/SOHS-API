@@ -77,23 +77,23 @@ export const middleware = {
   // ## Middleware: Cors handler
   // =============================>
   Cors: (app: Elysia) => app.onRequest(({ request, set }) => {
-      const origin                       = request.headers.get('origin') ?? ''
+      // const origin                       = request.headers.get('origin') ?? ''
       let allowedOrigin: string          = '*'
 
-      const originsConf = process.env.APP_CORS_ORIGINS || '*'
+      // const originsConf = process.env.APP_CORS_ORIGINS || '*'
 
-      if (originsConf !== '*') {
-        try {
-          const allowedOrigins = JSON.parse(originsConf)
-          if (Array.isArray(allowedOrigins) && allowedOrigins.includes(origin)) {
-              allowedOrigin = origin || ""
-          }
-        } catch (e) {
-          const em = 'Cors Error: Failed to parse APP_CORS_ORIGINS, fallback to "*"'
-          logger.error(em, { error: em })
-          allowedOrigin = ''
-        }
-      }
+      // if (originsConf !== '*') {
+      //   try {
+      //     const allowedOrigins = JSON.parse(originsConf)
+      //     if (Array.isArray(allowedOrigins) && allowedOrigins.includes(origin)) {
+      //         allowedOrigin = origin || ""
+      //     }
+      //   } catch (e) {
+      //     const em = 'Cors Error: Failed to parse APP_CORS_ORIGINS, fallback to "*"'
+      //     logger.error(em, { error: em })
+      //     allowedOrigin = ''
+      //   }
+      // }
       
       set.headers['Access-Control-Allow-Origin']      = allowedOrigin
       set.headers['Access-Control-Allow-Methods']     = process.env.APP_CORS_METHODS || 'GET, POST, PUT, DELETE, OPTIONS'
