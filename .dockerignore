@@ -1,0 +1,17 @@
+node_modules
+.git
+.next
+out
+build
+storage
+.env
+.env.local
+.env.*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.vscode
+.agent
+barrels.json.old
+*.tar.gz
+*.zip

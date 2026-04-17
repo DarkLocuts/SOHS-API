@@ -1,0 +1,25 @@
+version: '3'
+
+services:
+  sohs_api:
+    container_name: sohs_api
+    build: 
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: sohs_api:dev
+    ports:
+      - "${APP_PORT:-4000}:4000"
+    volumes:
+      - .:/app
+      - /app/node_modules
+    env_file:
+      - .env
+    environment:
+      - APP_PORT=4000
+      - NODE_ENV=development
+    restart: unless-stopped
+networks:
+  api_yukder_db_pgsql:
+    driver: bridge
+    external: true
