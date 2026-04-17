@@ -1,7 +1,6 @@
 export * from "./auth.util";
 export * from "./activity.util";
 export * from "./commands/logger";
-export * from "./commands/runner/da-migration";
 export * from "./cache.util";
 export * from "./controller.util";
 export * from "./conversion.util";
