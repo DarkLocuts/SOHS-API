@@ -1,5 +1,5 @@
 # use the official Bun image
-FROM oven/bun:1.1-alpine AS base
+FROM oven/bun:1.2-alpine AS base
 WORKDIR /app
 
 # ===================================================
@@ -8,11 +8,11 @@ WORKDIR /app
 FROM base AS install
 RUN mkdir -p /temp/dev
 COPY package.json bun.lock /temp/dev/
-RUN cd /temp/dev && bun install --frozen-lockfile
+RUN cd /temp/dev && bun install
 
 RUN mkdir -p /temp/prod
 COPY package.json bun.lock /temp/prod/
-RUN cd /temp/prod && bun install --frozen-lockfile --production
+RUN cd /temp/prod && bun install --production
 
 # ===================================================
 # Stage 2: Development (with watch mode)

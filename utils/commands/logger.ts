@@ -1,6 +1,6 @@
 import fs from 'fs';
 import path from 'path';
-import { daClient, queue, redis } from '@utils';
+import { queue } from '@utils';
 
 
 
