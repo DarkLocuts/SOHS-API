@@ -15,7 +15,6 @@ export class User extends Model {
     // ## Relations
     // =========================>
     role_id!: number
-
     @BelongsTo(() => Role)
     role!: Role
 }

@@ -7,7 +7,7 @@
 
 
 import type { ControllerContext } from "elysia"
-import { permission } from '@utils'
+import { conversion, permission } from '@utils'
 import { Location } from '@models'
 
 
@@ -57,7 +57,7 @@ export class LocationController {
         try {
             record = await (new Location).pump({
                 ...c.payload,
-                code: Math.floor(1000000000 + Math.random() * 9000000000).toString()
+                code: "SOHSL/" + String(conversion.strSlug(c.payload.name, "")).toUpperCase() 
             })            
         } catch (err) {
             c.responseError(err as Error, "Create Location")

@@ -28,10 +28,11 @@ export const ProductLabelService = {
                 }
                 
                 for (let seq = oldLastSequence + 1; seq <= item.last_number; seq++) {
+                    const paddedSeq = String(seq).padStart(4, "0");
                     const label = await ProductLabel.create({
                         product_id  :  item.product_id,
                         sequence    :  seq,
-                        code        :  `${product.code}_${seq}`
+                        code        :  `SOHSS/${product.code}/${paddedSeq}`
                     });
 
                     generatedLabels.push(label);

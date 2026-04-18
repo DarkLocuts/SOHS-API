@@ -8,7 +8,7 @@
 
 import type { ControllerContext } from "elysia"
 import { permission } from '@utils'
-import { Opname } from '@models'
+import { Opname, OpnameProduct } from '@models'
 import { OpnameService } from './_services/opname.service'
 
 
@@ -60,6 +60,16 @@ export class OpnameController {
         c.responseSaved(record)
     }
 
+    // ========================================>
+    // ## Display the specified resource.
+    // ========================================>
+    static async show(c: ControllerContext) {
+        p.have("300.00").guard(c)
+
+        const record = await Opname.query().findOrNotFound(c.params.id)
+        
+        c.responseSuccess(record)
+    }
 
     // ============================================>
     // ## Update the specified resource.
@@ -112,5 +122,14 @@ export class OpnameController {
         }
 
         c.responseSuccess(records)
+    }
+
+    // ===============================================>
+    // ## Display a listing of opname products.
+    // ===============================================>
+    static async getProducts(c: ControllerContext) {
+        const data = await OpnameProduct.query().where('opname_id', c.params.id).get()
+        
+        c.responseData(data)
     }
 }

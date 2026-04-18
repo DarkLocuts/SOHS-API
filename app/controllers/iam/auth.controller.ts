@@ -31,8 +31,8 @@ export class AuthController {
     // ## Get logged account
     // =============================================>
     static async me(c: ControllerContext) {
-        const model = await User.query().expand(["role"]).findOrNotFound(c.user.id)
-        
+        const model = await User.query().expand(["role"]).where("id", c.user.id).getFirst()
+
         c.responseSuccess(model, "Success")
     }
 

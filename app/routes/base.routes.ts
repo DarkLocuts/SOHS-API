@@ -9,6 +9,7 @@ import {
     LocationController,
     ProductController,
     OpnameController,
+    DashboardController,
 } from '@controllers'
 
 
@@ -34,9 +35,11 @@ export const routes = (app: Elysia) => app.group('/api', (route) => {
     route.post('/products/sync', ProductController.sync);
     route.get('/product-labels', ProductController.getLabels);
     route.post('/product-labels', ProductController.generateLabels);
-
     api(route, "/opnames", OpnameController);
+    route.get('/opnames/:id/products', OpnameController.getProducts);
     route.post('/opnames/:id/labels', OpnameController.addLabels);
+
+    route.get('/dashboard', DashboardController.index);
 
     return route;
 })

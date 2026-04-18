@@ -155,7 +155,7 @@ export class ProductController {
     static async getLabels(c: ControllerContext) {
         p.have("200.00").guard(c)
 
-        const { data, total } = await ProductLabel.query().with('product').with('location').resolve(c)
+        const { data, total } = await ProductLabel.query().resolve(c)
         
         c.responseData(data, total)
     }

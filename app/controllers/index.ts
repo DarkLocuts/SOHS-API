@@ -3,6 +3,8 @@
  */
 
 export * from "./base.controller";
+export * from "./dashboard/dashboard.controller";
+export * from "./dashboard/_services/dashboard.service";
 export * from "./iam/auth.controller";
 export * from "./iam/user.controller";
 export * from "./inventory/brand.controller";
