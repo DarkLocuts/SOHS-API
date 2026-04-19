@@ -19,6 +19,8 @@ services:
       - APP_PORT=4000
       - NODE_ENV=development
     restart: unless-stopped
+    networks:
+      - api_yukder_db_pgsql
 networks:
   api_yukder_db_pgsql:
     driver: bridge

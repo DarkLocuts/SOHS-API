@@ -3,15 +3,15 @@
  */
 
 export * from "./base.controller";
+export * from "./inventory/brand.controller";
+export * from "./inventory/location.controller";
+export * from "./inventory/category.controller";
+export * from "./inventory/product.controller";
+export * from "./inventory/_services/product.service";
+export * from "./inventory/_services/product-label.service";
 export * from "./dashboard/dashboard.controller";
 export * from "./dashboard/_services/dashboard.service";
-export * from "./iam/auth.controller";
-export * from "./iam/user.controller";
-export * from "./inventory/brand.controller";
-export * from "./inventory/category.controller";
-export * from "./inventory/location.controller";
-export * from "./inventory/product.controller";
-export * from "./inventory/_services/product-label.service";
-export * from "./inventory/_services/product.service";
 export * from "./opname/opname.controller";
 export * from "./opname/_services/opname.service";
+export * from "./iam/auth.controller";
+export * from "./iam/user.controller";
