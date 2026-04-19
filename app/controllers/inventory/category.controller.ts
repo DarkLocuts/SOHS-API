@@ -36,7 +36,7 @@ export class CategoryController {
     static async index(c: ControllerContext) {
         p.have("201.00").guard(c)
 
-        const { data, total } = await Category.query().resolve(c)
+        const { data, total } = await Category.query().withAggregate('products', 'count').resolve(c)
         
         c.responseData(data, total)
     }

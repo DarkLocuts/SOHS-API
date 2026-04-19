@@ -76,7 +76,7 @@ export class AuthController {
             new_password  :  ["required", "max:100"],
         })
 
-        const checkPassword = await bcrypt.compare(c.payload?.password, model.password)
+        const checkPassword = await bcrypt.compare(c.payload?.old_password, model.password)
         if (!checkPassword) return c.responseErrorValidation({ old_password: ["Password lama salah!"] })
 
         const trx = await db.transaction()

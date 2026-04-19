@@ -6,8 +6,8 @@
 
 
 
-import { Model, SoftDelete, Field } from '@utils'
-
+import { Model, SoftDelete, Field, HasMany } from '@utils'
+import { Product } from '@models'
 
 export class Category extends Model {
     // =====================>
@@ -23,7 +23,8 @@ export class Category extends Model {
     // =========================>
     // ## Relations
     // =========================>
-
+    @HasMany(() => Product)
+    products!: Product[]
 
 
     // =====================>

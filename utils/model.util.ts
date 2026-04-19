@@ -923,9 +923,7 @@ export abstract class Model {
 
     const expanded = (this as any).__expandedAttributes ?? []
     for (const key of expanded) {
-      if (attributes[key]) {
-        data[key] = (this as any)[key]
-      }
+      data[key] = (this as any)[key]
     }
 
     for (const key of Object.keys(relations)) {
@@ -1161,9 +1159,17 @@ export function extendModelQuery(
       await loadRelations(result, this.$model, this._withTree)
     }
 
-    result.forEach((item: any) => {
-      item.__expandedAttributes = Object.keys(this._withTree || {})
+    const aggregateAliases = this._withAggregates?.map((a: any) => a.alias) ?? []
+
+    result.forEach((item: any, index: number) => {
+      const expanded = Object.keys(this._withTree || {})
         .filter(k => this._withTree[k]?.__attribute)
+
+      item.__expandedAttributes = [...expanded, ...aggregateAliases]
+
+      for (const alias of aggregateAliases) {
+        item[alias] = rows[index][alias]
+      }
     })
 
     if (this._formatter) {
@@ -1191,7 +1197,15 @@ export function extendModelQuery(
 
     if(!result.at(0)) return null
 
-    result.at(0).__expandedAttributes = Object.keys(this._withTree || {}).filter(k => this._withTree[k]?.__attribute)
+    const item = result.at(0)
+    const aggregateAliases = this._withAggregates?.map((a: any) => a.alias) ?? []
+    const expanded = Object.keys(this._withTree || {}).filter(k => this._withTree[k]?.__attribute)
+
+    item.__expandedAttributes = [...expanded, ...aggregateAliases]
+
+    for (const alias of aggregateAliases) {
+      item[alias] = rows[0][alias]
+    }
 
     if (this._formatter) {
       result = result.map(this._formatter).at(0)
@@ -1210,6 +1224,7 @@ export function extendModelQuery(
       applyGlobalScopes(this)
       applyWithAggregates(this)
       applyOrderByAggregates(this)
+      
 
       const offset  =  (page - 1) * limit
 
@@ -1225,9 +1240,17 @@ export function extendModelQuery(
         await loadRelations(data, this.$model, this._withTree)
       }
 
-      data.forEach((item: any) => {
-        item.__expandedAttributes = Object.keys(this._withTree || {})
+      const aggregateAliases = this._withAggregates?.map((a: any) => a.alias) ?? []
+
+      data.forEach((item: any, index: number) => {
+        const expanded = Object.keys(this._withTree || {})
           .filter(k => this._withTree[k]?.__attribute)
+
+        item.__expandedAttributes = [...expanded, ...aggregateAliases]
+
+        for (const alias of aggregateAliases) {
+          item[alias] = raw[index][alias]
+        }
       })
 
       if (this._formatter) {
@@ -2144,7 +2167,7 @@ function applyWithAggregates(query: any) {
 
     desc.callback?.(sub)
     item.callback?.(sub)
-
+    
     query.select(query.client.raw(`(${sub.toQuery()}) as ${item.alias}`))
   }
 }

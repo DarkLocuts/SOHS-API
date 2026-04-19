@@ -65,6 +65,16 @@ export const OpnameService = {
                 await opnameProduct.useTransaction(trx).save()
             }
 
+            const opnameLabels = await OpnameProductLabel.query(trx).where('opname_id', opnameId).get()
+            for (const opnameLabel of opnameLabels) {
+                await db(ProductLabel.getTable())
+                    .transacting(trx)
+                    .where('id', opnameLabel.product_label_id)
+                    .update({
+                        location_id  :  opnameLabel.location_id,
+                    })
+            }
+
             await db(OpnameLocation.getTable()).where('opname_id', opnameId).delete()
 
             const labelsGrouped = await db(OpnameProductLabel.getTable())

@@ -9,6 +9,7 @@
 import type { ControllerContext } from "elysia"
 import { conversion, permission } from '@utils'
 import { Location } from '@models'
+import { LocationService } from "./_services/location.service"
 
 
 
@@ -64,6 +65,17 @@ export class LocationController {
         }
 
         c.responseSaved(record)
+    }
+
+
+    // ========================================>
+    // ## Display the specified resource.
+    // ========================================>
+    static async show(c: ControllerContext) {
+        p.have("203.00").guard(c)
+        const record = await LocationService.getDetail(c.params.id)
+
+        c.responseSuccess(record)
     }
 
 

@@ -23,8 +23,8 @@ export const routes = (app: Elysia) => app.group('/api', (route) => {
     route.use(middleware.Private)
 
     route.get('/me', AuthController.me)
-    route.post('/me', AuthController.update)
-    route.post('/me/update-password', AuthController.updatePassword)
+    route.put('/me', AuthController.update)
+    route.put('/me/update-password', AuthController.updatePassword)
 
     api(route, "/users", UserController);
     api(route, "/categories", CategoryController);

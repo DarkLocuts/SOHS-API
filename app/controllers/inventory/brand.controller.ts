@@ -36,7 +36,7 @@ export class BrandController {
     static async index(c: ControllerContext) {
         p.have("202.00").guard(c)
 
-        const { data, total } = await Brand.query().resolve(c)
+        const { data, total } = await Brand.query().withAggregate('products', 'count').resolve(c)
         
         c.responseData(data, total)
     }

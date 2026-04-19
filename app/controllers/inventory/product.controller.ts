@@ -78,7 +78,7 @@ export class ProductController {
         const record = await Product.query().findOrNotFound(c.params.id)
 
         await c.validation<Product>({
-            "code"   :  ["required","string","max:50","unique:products,code"],
+            "code"   :  ["required","string","max:50",`unique:products,code,${c.params.id}`],
             "name"   :  ["required","string","max:200"],
             "stock"  :  ["numeric"],
         })
@@ -106,6 +106,17 @@ export class ProductController {
         } catch (err) {
             c.responseError(err as Error, "Delete Product")
         }
+
+        c.responseSuccess(record)
+    }
+
+
+    // ========================================>
+    // ## Display the specified resource.
+    // ========================================>
+    static async show(c: ControllerContext) {
+        p.have("200.00").guard(c)
+        const record = await ProductService.getDetail(c.params.id)
 
         c.responseSuccess(record)
     }

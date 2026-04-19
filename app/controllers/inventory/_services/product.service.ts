@@ -61,5 +61,44 @@ export const ProductService = {
     },
 
 
-    generate: async (payload: any[]) => {}
+    generate: async (payload: any[]) => {},
+
+
+    getDetail: async (id: string | number) => {
+        const product           =  await Product.query().findOrNotFound(id)
+
+        const totalStock        =  await db('product_labels')
+            .where('product_id', id)
+            .whereNull('deleted_at')
+            .count('id as total')
+            .first()
+            .then(r => parseInt(String(r?.total ?? 0)))
+
+        const totalLocations    =  await db('product_labels')
+            .where('product_id', id)
+            .whereNull('deleted_at')
+            .countDistinct('location_id as total')
+            .first()
+            .then(r => parseInt(String(r?.total ?? 0)))
+
+        const locations         =  await db('product_labels as pl')
+            .join('locations as l', 'pl.location_id', 'l.id')
+            .where('pl.product_id', id)
+            .whereNull('pl.deleted_at')
+            .whereNull('l.deleted_at')
+            .select('l.id', 'l.code', 'l.name')
+            .count('pl.id as stock')
+            .groupBy('l.id', 'l.code', 'l.name')
+            .then(rows => rows.map((r: any) => ({
+                ...r,
+                stock: parseInt(String(r.stock ?? 0))
+            })))
+
+        return {
+            ...product,
+            total_stock      :  totalStock,
+            total_locations  :  totalLocations,
+            locations        :  locations
+        }
+    }
 }
