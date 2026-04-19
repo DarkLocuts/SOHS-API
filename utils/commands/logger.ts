@@ -118,10 +118,10 @@ const filePath = () => {
 
 const handlers: Record<DriverName, (log: AccessLog) => Promise<void>> = {
   file: async (log) => {
-    const dir = path.resolve(ACCESS_LOG_LOG_DIR);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    // const dir = path.resolve(ACCESS_LOG_LOG_DIR);
+    // if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
-    fs.appendFile(filePath(), JSON.stringify(log) + "\n", () => {})
+    // fs.appendFile(filePath(), JSON.stringify(log) + "\n", () => {})
   },
   da: async (log) => {
     try {
@@ -150,10 +150,10 @@ const errorFilePath = () => {
 
 const errorHandlers: Record<DriverName, (log: ErrorLog) => Promise<void>> = {
   file: async (log) => {
-    const dir = path.resolve(ERROR_LOG_LOG_DIR);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    // const dir = path.resolve(ERROR_LOG_LOG_DIR);
+    // if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
 
-    fs.appendFile(errorFilePath(), JSON.stringify(log) + "\n", () => {});
+    // fs.appendFile(errorFilePath(), JSON.stringify(log) + "\n", () => {});
   },
   da: async (log) => {
     try {
