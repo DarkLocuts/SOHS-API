@@ -78,14 +78,16 @@ export const middleware = {
   // =============================>
   Cors: (app: Elysia) => app.onRequest(({ request, set }) => {
       const origin         =  request.headers.get('origin') ?? ''
-      let   allowedOrigin  =  '*'
+      let   allowedOrigin  =  ''
       const originsConf    =  process.env.APP_CORS_ORIGINS || '*'
 
+      logger.warning(originsConf)
       if (originsConf === '*') {
         allowedOrigin = origin
       } else {
         try {
           const allowedOrigins = JSON.parse(originsConf)
+          logger.warning(allowedOrigins)
 
           if (Array.isArray(allowedOrigins) && allowedOrigins.includes(origin)) {
             allowedOrigin = origin
