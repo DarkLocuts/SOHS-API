@@ -230,6 +230,11 @@ async function checkRules({ field, value, rules, data, errors } : { field: strin
         const [table, column, exceptId] = param!.split(",")
         const query = db.table(table).where(column, value)
         if (exceptId) query.whereNot("id", exceptId)
+
+        if (await db.schema.hasColumn(table, "deleted_at")) {
+          query.whereNull("deleted_at")
+        }
+
         const existing = await query.first()
         if (existing) {
           addError(errors, field, `${field} sudah digunakan`)
@@ -239,7 +244,13 @@ async function checkRules({ field, value, rules, data, errors } : { field: strin
 
       case "exists": {
         const [table, column] = param!.split(",")
-        const existing = await db.table(table).where(column, value).first()
+        const query = db.table(table).where(column, value)
+
+        if (await db.schema.hasColumn(table, "deleted_at")) {
+          query.whereNull("deleted_at")
+        }
+
+        const existing = await query.first()
         if (!existing) {
           addError(errors, field, `${field} tidak ditemukan di ${table}`)
         }

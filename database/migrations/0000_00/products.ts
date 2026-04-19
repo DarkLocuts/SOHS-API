@@ -13,7 +13,7 @@ export async function up(knex: Knex): Promise<void> {
     table.bigIncrements('id').primary()
     table.foreignIdFor("categories")
     table.foreignIdFor("brands")
-    table.string("code", 50).unique().notNullable().index()
+    table.string("code", 50).notNullable().index()
     table.string("name", 200).notNullable()
     table.integer("stock")
     table.integer("last_sequence")

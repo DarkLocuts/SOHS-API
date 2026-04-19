@@ -30,7 +30,7 @@ export class UserController {
   // =============================================>
   static async store(c: ControllerContext) {
     
-    c.validation<User>({
+    await c.validation<User>({
       name      :  ["required", "max:200"],
       username  :  ["required", "max:100"],
       password  :  ["required", "max:100"],
@@ -62,7 +62,7 @@ export class UserController {
   static async update(c: ControllerContext) {
     let record = await User.query().findOrNotFound(c.params.id);
 
-    c.validation({
+    await c.validation({
         name      :  ["required"],
         username  :  ["required", "max:100"],
         password  :  ["required", "max:100"],

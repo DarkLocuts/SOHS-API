@@ -48,8 +48,8 @@ export class BrandController {
     static async store(c: ControllerContext) {
         p.have("202.01").guard(c)
 
-        c.validation<Brand>({
-            "name": ["required","string","max:200","min:1","max:200","unique:inventory/brands,name"]
+        await c.validation<Brand>({
+            "name": ["required","string","max:200","min:1","max:200","unique:brands,name"]
         })
 
         let record = {}
@@ -72,8 +72,8 @@ export class BrandController {
 
         const record = await Brand.query().findOrNotFound(c.params.id)
 
-        c.validation<Brand>({
-            "name": ["required","string","max:200","min:1","max:200","unique:inventory/brands,name"]
+        await c.validation<Brand>({
+            "name": ["required","string","max:200","min:1","max:200","unique:brands,name"]
         })
 
         try {

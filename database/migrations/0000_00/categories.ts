@@ -11,7 +11,7 @@ import type { Knex } from "knex"
 export async function up(knex: Knex): Promise<void> {
   await knex.schema.createTable("categories", (table) => {
     table.bigIncrements('id').primary()
-    table.string("name", 200).unique().notNullable().index()
+    table.string("name", 200).notNullable().index()
     table.timestamps(true, true)
     table.softDelete()
   })

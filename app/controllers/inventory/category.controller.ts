@@ -48,8 +48,8 @@ export class CategoryController {
     static async store(c: ControllerContext) {
         p.have("201.01").guard(c)
 
-        c.validation<Category>({
-            "name": ["required","string","max:200","min:1","max:200","unique:inventory/categories,name"]
+        await c.validation<Category>({
+            "name": ["required","string","max:200","min:1","max:200","unique:categories,name"]
         })
 
         let record = {}
@@ -72,8 +72,8 @@ export class CategoryController {
 
         const record = await Category.query().findOrNotFound(c.params.id)
 
-        c.validation<Category>({
-            "name": ["required","string","max:200","min:1","max:200","unique:inventory/categories,name"]
+        await c.validation<Category>({
+            "name": ["required","string","max:200","min:1","max:200","unique:categories,name"]
         })
 
         try {

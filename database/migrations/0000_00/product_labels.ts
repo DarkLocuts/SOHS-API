@@ -14,7 +14,7 @@ export async function up(knex: Knex): Promise<void> {
     table.foreignIdFor("products")
     table.foreignIdFor("locations")
     table.integer("sequence").notNullable()
-    table.string("code").notNullable()
+    table.string("code").notNullable().index()
     table.timestamps(true, true)
     table.softDelete()
   })

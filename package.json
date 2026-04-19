@@ -2,7 +2,7 @@
   "name": "elysia-light",
   "version": "1.0.0",
   "scripts": {
-    "dev": "concurrently --raw \"bun run --watch app/app.ts\" \"bun barrels\" \"bun start:cron\" \"bun start:queue\" \"bun start:socket\"",
+    "dev": "concurrently --raw \"bun run --watch app/app.ts\" \"bun barrels\"",
     "start": "bun run app/app.ts",
     "start:cron": "bun run app/jobs/crons/worker.cron.ts",
     "start:queue": "bun run app/jobs/queues/worker.queue.ts",

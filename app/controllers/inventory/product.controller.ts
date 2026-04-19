@@ -51,7 +51,7 @@ export class ProductController {
     static async store(c: ControllerContext) {
         p.have("200.01").guard(c)
 
-        c.validation<Product>({
+        await c.validation<Product>({
             "code"   :  ["required","string","max:50","unique:products,code"],
             "name"   :  ["required","string","max:200"],
             "stock"  :  ["numeric"]
@@ -77,7 +77,7 @@ export class ProductController {
 
         const record = await Product.query().findOrNotFound(c.params.id)
 
-        c.validation<Product>({
+        await c.validation<Product>({
             "code"   :  ["required","string","max:50","unique:products,code"],
             "name"   :  ["required","string","max:200"],
             "stock"  :  ["numeric"],

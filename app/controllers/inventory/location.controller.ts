@@ -48,8 +48,8 @@ export class LocationController {
     static async store(c: ControllerContext) {
         p.have("203.01").guard(c)
 
-        c.validation<Location>({
-            "name": ["required","string","max:200","min:1","max:200"]
+        await c.validation<Location>({
+            "name": ["required","string","max:200","min:1","max:200","unique:locations,name"]
         })
 
         let record = {}
@@ -75,8 +75,8 @@ export class LocationController {
 
         const record = await Location.query().findOrNotFound(c.params.id)
 
-        c.validation<Location>({
-            "name": ["required","string","max:200","min:1","max:200"]
+        await c.validation<Location>({
+            "name": ["required","string","max:200","min:1","max:200","unique:locations,name"]
         })
 
         try {
