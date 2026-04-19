@@ -81,13 +81,11 @@ export const middleware = {
       let   allowedOrigin  =  ''
       const originsConf    =  process.env.APP_CORS_ORIGINS || '*'
 
-      console.log("originsConf: " + originsConf)
       if (originsConf === '*') {
         allowedOrigin = origin
       } else {
         try {
           const allowedOrigins = JSON.parse(originsConf)
-          console.log("allowedOrigins: " + JSON.stringify(allowedOrigins))
 
           if (Array.isArray(allowedOrigins) && allowedOrigins.includes(origin)) {
             allowedOrigin = origin
