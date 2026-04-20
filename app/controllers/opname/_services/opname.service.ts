@@ -112,7 +112,7 @@ export const OpnameService = {
 
         await db.transaction(async (trx) => {
             for (const item of labels) {
-                const productLabel = await ProductLabel.query(trx).where('code', item.code).with('product').getFirst()
+                const productLabel = await ProductLabel.query(trx).where('code', item.code).expand(['product']).getFirst()
                 
                 if (!productLabel) continue
 
@@ -137,16 +137,20 @@ export const OpnameService = {
                     .where('product_label_id', productLabel.id)
                     .getFirst()
                 
-                if (existing) continue
-
+                if (existing) {
+                    existing.update({
+                        location_id: item.location_id
+                    })
+                }
+                
                 const newLabel = await OpnameProductLabel.create({
                     opname_id          :  Number(opnameId),
                     opname_product_id  :  opnameProduct.id,
                     product_id         :  productLabel.product_id,
                     product_label_id   :  productLabel.id,
-                    location_id        :  item.location_id
+                    location_id        :  item.location_id || null
                 }, trx)
-
+                
                 opnameProduct.final_stock = (opnameProduct.final_stock || 0) + 1
                 opnameProduct.deviation_stock = (opnameProduct.final_stock || 0) - (opnameProduct.initial_stock || 0)
                 await opnameProduct.useTransaction(trx).save()

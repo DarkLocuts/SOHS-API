@@ -36,9 +36,9 @@ export class OpnameProductLabel extends Model {
 
     product_label_id!: number
     @BelongsTo(() => ProductLabel)
-    label!: ProductLabel
+    product_label!: ProductLabel
 
-    location_id!: number
+    location_id!: number | null
     @BelongsTo(() => Location)
     location!: Location
 
