@@ -92,7 +92,7 @@ export const OpnameService = {
                     .where('location_id', locationId)
                     .countDistinct('product_id as total_product')
                     .first() as any
-                
+                console.log("uniqueProductResult", uniqueProductResult)
                 await OpnameLocation.create({
                     opname_id       :  Number(opnameId),
                     location_id     :  locationId,
@@ -101,7 +101,7 @@ export const OpnameService = {
                     total_stock     :  Number(group.total_stock || 0)
                 }, trx)
             }
-            console.log("opname", opname)
+
             return opname
         })
     },
