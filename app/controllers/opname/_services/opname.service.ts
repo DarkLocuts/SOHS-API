@@ -64,7 +64,7 @@ export const OpnameService = {
                 opnameProduct.deviation_stock = count - (opnameProduct.initial_stock || 0)
                 await opnameProduct.useTransaction(trx).save()
             }
-            console.log("opnameProducts", opnameProducts)
+
             const opnameLabels = await OpnameProductLabel.query(trx).where('opname_id', opnameId).get()
             for (const opnameLabel of opnameLabels) {
                 await db(ProductLabel.getTable())
@@ -74,7 +74,7 @@ export const OpnameService = {
                         location_id  :  opnameLabel.location_id,
                     })
             }
-            console.log("opnameLabels", opnameLabels)
+
             await db(OpnameLocation.getTable()).where('opname_id', opnameId).delete()
 
             const labelsGrouped = await db(OpnameProductLabel.getTable())
@@ -82,17 +82,19 @@ export const OpnameService = {
                 .select('location_id')
                 .count('id as total_stock')
                 .groupBy('location_id') as any[]
-            console.log("labelsGrouped", labelsGrouped)
+        
             for (const group of labelsGrouped) {
+                if(!group.location_id) continue
                 const locationId = group.location_id
-                const location = await Location.query(trx).findOrNotFound(locationId)
                 
+                const location = await Location.query(trx).findOrNotFound(locationId)
+
                 const uniqueProductResult = await db(OpnameProductLabel.getTable())
                     .where('opname_id', opnameId)
                     .where('location_id', locationId)
                     .countDistinct('product_id as total_product')
                     .first() as any
-                console.log("uniqueProductResult", uniqueProductResult)
+                
                 await OpnameLocation.create({
                     opname_id       :  Number(opnameId),
                     location_id     :  locationId,
