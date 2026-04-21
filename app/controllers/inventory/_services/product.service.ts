@@ -65,7 +65,7 @@ export const ProductService = {
 
 
     getDetail: async (id: string | number) => {
-        const product           =  await Product.query().findOrNotFound(id)
+        const product           =  await Product.query().expand(["brand", "category"]).where('id', id).getFirst()
 
         const totalStock        =  await db('product_labels')
             .where('product_id', id)
@@ -95,7 +95,11 @@ export const ProductService = {
             })))
 
         return {
-            ...product,
+            id               :  product.id,
+            name             :  product.name,
+            code             :  product.code,
+            brand            :  product.brand,
+            category         :  product.category,
             total_stock      :  totalStock,
             total_locations  :  totalLocations,
             locations        :  locations
