@@ -101,7 +101,7 @@ export const OpnameService = {
                     total_stock     :  Number(group.total_stock || 0)
                 }, trx)
             }
-
+            console.log("opname", opname)
             return opname
         })
     },
