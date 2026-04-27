@@ -88,6 +88,23 @@ export class OpnameController {
         c.responseSaved(record)
     }
 
+    // ============================================>
+    // ## Cancel the specified resource.
+    // ============================================>
+    static async cancel(c: ControllerContext) {
+        p.have("300.02").guard(c)
+
+        let record = {}
+
+        try {
+            record = await OpnameService.cancel(c.params.id, c.user.id)
+        } catch (err) {
+            c.responseError(err as Error, "Cancel Opname")
+        }
+        
+        c.responseSaved(record)
+    }
+
 
     // ===============================================>
     // ## Remove the specified resource.

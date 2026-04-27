@@ -65,7 +65,7 @@ export class UserController {
     await c.validation({
         name      :  ["required"],
         username  :  ["required", "max:100"],
-        password  :  ["required", "max:100"],
+        password  :  ["max:100"],
     })
     
     const trx = await db.transaction()

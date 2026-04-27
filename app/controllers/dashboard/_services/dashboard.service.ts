@@ -27,7 +27,7 @@ export class DashboardService {
 
         const startDate = new Date(now.getFullYear(), now.getMonth() - 11, 1)
 
-        const opnames = await Opname.query().expand(['products']).whereNull('deleted_at').where('start_at', '>=', startDate).get()
+        const opnames = await Opname.query().expand(['products']).whereNull('deleted_at').where('status', 'DONE').where('start_at', '>=', startDate).get()
 
         for (const opname of opnames) {
             const opDate   =  new Date(opname.start_at)
@@ -44,7 +44,7 @@ export class DashboardService {
 
         const cleanedStockVariance = stock_variance.map(({ _year, _month, ...rest }) => rest)
 
-        const recentOpnamesData = await Opname.query().expand(['products']).whereNull('deleted_at').orderBy('created_at', 'desc').limit(5).get()
+        const recentOpnamesData = await Opname.query().expand(['products']).whereNull('deleted_at').where('status', 'DONE').orderBy('created_at', 'desc').limit(5).get()
 
         const recent_opnames = recentOpnamesData.map(opname => {
             const variance = opname.products?.reduce((sum: number, p: OpnameProduct) => sum + Math.abs(p.deviation_stock || 0), 0) || 0

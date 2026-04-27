@@ -25,6 +25,21 @@ export class Opname extends Model {
     @Field(["fillable","searchable","selectable"])
     status!: "OPEN" | "DONE" | "CANCEL"
 
+    @Field(["fillable","selectable"])
+    total_product!: number
+
+    @Field(["fillable","selectable"])
+    total_stock!: number
+
+    @Field(["fillable","selectable"])
+    total_deviation_product!: number
+
+    @Field(["fillable","selectable"])
+    total_deviation_stock!: number
+
+    @Field(["fillable","selectable"])
+    total_location!: number
+
     @SoftDelete()
     deleted_at!: Date
 

@@ -49,9 +49,14 @@ export const OpnameService = {
             opname.end_at = new Date()
             opname.status = "DONE"
             opname.closed_by_id = userId
-            await opname.useTransaction(trx).save()
             
             const opnameProducts = await OpnameProduct.query(trx).where('opname_id', opnameId).get()
+            
+            let totalProduct = 0
+            let totalStock = 0
+            let totalDeviationProduct = 0
+            let totalDeviationStock = 0
+
             for (const opnameProduct of opnameProducts) {
                 const scanCountResult = await db(OpnameProductLabel.getTable())
                     .where('opname_id', opnameId)
@@ -63,6 +68,13 @@ export const OpnameService = {
                 opnameProduct.final_stock = count
                 opnameProduct.deviation_stock = count - (opnameProduct.initial_stock || 0)
                 await opnameProduct.useTransaction(trx).save()
+
+                totalProduct += 1
+                totalStock += opnameProduct.final_stock
+                totalDeviationStock += opnameProduct.deviation_stock
+                if (opnameProduct.deviation_stock !== 0) {
+                    totalDeviationProduct += 1
+                }
             }
 
             const opnameLabels = await OpnameProductLabel.query(trx).where('opname_id', opnameId).get()
@@ -83,8 +95,10 @@ export const OpnameService = {
                 .count('id as total_stock')
                 .groupBy('location_id') as any[]
         
+            let totalLocation = 0
             for (const group of labelsGrouped) {
                 if(!group.location_id) continue
+                totalLocation += 1
                 const locationId = group.location_id
                 
                 const location = await Location.query(trx).findOrNotFound(locationId)
@@ -103,6 +117,31 @@ export const OpnameService = {
                     total_stock     :  Number(group.total_stock || 0)
                 }, trx)
             }
+
+            opname.total_product = totalProduct
+            opname.total_stock = totalStock
+            opname.total_deviation_product = totalDeviationProduct
+            opname.total_deviation_stock = totalDeviationStock
+            opname.total_location = totalLocation
+            await opname.useTransaction(trx).save()
+
+            return opname
+        })
+    },
+
+
+    cancel: async (opnameId: number | string, userId: number) => {
+        return await db.transaction(async (trx) => {
+            const opname = await Opname.query(trx).findOrNotFound(opnameId)
+            
+            if (opname.status !== "OPEN") {
+                throw new Error("Opname cannot be canceled because it is not OPEN")
+            }
+
+            opname.end_at = new Date()
+            opname.status = "CANCEL"
+            opname.closed_by_id = userId
+            await opname.useTransaction(trx).save()
 
             return opname
         })
