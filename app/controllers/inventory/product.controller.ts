@@ -84,7 +84,11 @@ export class ProductController {
         })
 
         try {
-            await record.pump(c.payload)
+            await record.pump({
+                "code"   :  c.payload.code,
+                "name"   :  c.payload.name,
+                "stock"  :  c.payload.stock,
+            })
         } catch (err) {
             c.responseError(err as Error, "Update Product")
         }
