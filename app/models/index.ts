@@ -13,6 +13,7 @@ export * from "./inventory/product-location.model";
 export * from "./inventory/product-sync-log.model";
 export * from "./inventory/product.model";
 export * from "./inventory/sync-log.model";
+export * from "./opname/opname-brand.model";
 export * from "./opname/opname-location.model";
 export * from "./opname/opname-product-label.model";
 export * from "./opname/opname-product.model";

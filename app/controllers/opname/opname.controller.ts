@@ -8,7 +8,7 @@
 
 import type { ControllerContext } from "elysia"
 import { permission } from '@utils'
-import { Opname, OpnameLocation, OpnameProduct, OpnameProductLabel } from '@models'
+import { Opname, OpnameLocation, OpnameProduct, OpnameProductLabel, ProductLabel } from '@models'
 import { OpnameService } from './_services/opname.service'
 
 
@@ -52,7 +52,8 @@ export class OpnameController {
         let record = {}
 
         try {
-            record = await OpnameService.create(c.user.id)
+            const brands = (c.body as any)?.brands
+            record = await OpnameService.create(c.user.id, brands)
         } catch (err) {
             c.responseError(err as Error, "Create Opname")
         }
@@ -66,7 +67,7 @@ export class OpnameController {
     static async show(c: ControllerContext) {
         p.have("300.00").guard(c)
 
-        const record = await Opname.query().expand(["created_by", "closed_by"]).where('id', c.params.id).getFirst()
+        const record = await Opname.query().expand(["created_by", "closed_by", "brands.brand"]).where('id', c.params.id).getFirst()
         
         c.responseSuccess(record)
     }
@@ -124,11 +125,21 @@ export class OpnameController {
     }
 
 
-    // ===============================================>
-    // ## Display a listing of opname labels.
-    // ===============================================>
     static async getLabels(c: ControllerContext) {
         const data = await OpnameProductLabel.query().expand(['product_label', 'location']).where('opname_id', c.params.id).get()
+        
+        c.responseData(data)
+    }
+
+
+    // ===============================================>
+    // ## Display a listing of product labels for products in the opname.
+    // ===============================================>
+    static async getProductLabels(c: ControllerContext) {
+        const opnameProducts = await OpnameProduct.query().where('opname_id', c.params.id).get()
+        const productIds = opnameProducts.map(p => p.product_id)
+
+        const data = await ProductLabel.query().expand(['product']).whereIn('product_id', productIds).get()
         
         c.responseData(data)
     }
@@ -143,7 +154,7 @@ export class OpnameController {
         let records = []
 
         try {
-            records = await OpnameService.addLabels(c.params.id, c.payload as any)
+            records = await OpnameService.addLabels(c.params.id, c.payload as any, c.user.id)
         } catch (err) {
             c.responseError(err as Error, "Add Labels")
         }

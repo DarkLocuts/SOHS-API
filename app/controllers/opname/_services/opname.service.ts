@@ -1,9 +1,9 @@
-import { Opname, ProductLabel, OpnameProduct, OpnameProductLabel, Product, OpnameLocation, Location } from "@models"
+import { Opname, ProductLabel, OpnameProduct, OpnameProductLabel, Product, OpnameLocation, Location, Brand, OpnameBrand } from "@models"
 import { db } from "@utils"
 
 
 export const OpnameService = {
-    create: async (userId: number) => {
+    create: async (userId: number, brands?: string) => {
         const now      =  new Date()
         const yyyy     =  now.getFullYear()
         const mm       =  String(now.getMonth() + 1).padStart(2, '0')
@@ -24,7 +24,30 @@ export const OpnameService = {
                 created_by_id   :  userId
             }, trx)
 
-            const products = await Product.query(trx).get()
+            const brandIds = brands ? brands.split(',').map(id => id.trim()).filter(id => id !== "") : []
+
+            let brandList: Brand[] = []
+            if (brandIds.length > 0) {
+                brandList = await Brand.query(trx).whereIn('id', brandIds).get() as Brand[]
+            } else {
+                brandList = await Brand.query(trx).get() as Brand[]
+            }
+
+            let productQuery = Product.query(trx)
+            if (brandIds.length > 0) {
+                productQuery = productQuery.whereIn('brand_id', brandIds)
+            }
+            const products = await productQuery.get() as Product[]
+
+            for (const brand of brandList) {
+                const brandProducts = products.filter(p => p.brand_id === brand.id)
+                await OpnameBrand.create({
+                    opname_id       :  record.id,
+                    brand_id        :  brand.id,
+                    total_product   :  brandProducts.length,
+                    total_stock     :  brandProducts.reduce((sum, p) => sum + (p.stock || 0), 0)
+                }, trx)
+            }
 
             for (const product of products) {
                 await OpnameProduct.create({
@@ -148,7 +171,7 @@ export const OpnameService = {
     },
 
 
-    addLabels: async (opnameId: number | string, labels: { code: string, location_id: number }[]) => {
+    addLabels: async (opnameId: number | string, labels: { code: string, location_id: number }[], userId: number) => {
         const results: any[] = []
 
         await db.transaction(async (trx) => {
@@ -189,7 +212,8 @@ export const OpnameService = {
                     opname_product_id  :  opnameProduct.id,
                     product_id         :  productLabel.product_id,
                     product_label_id   :  productLabel.id,
-                    location_id        :  item.location_id || null
+                    location_id        :  item.location_id || null,
+                    user_id            :  userId
                 }, trx)
                 
                 opnameProduct.final_stock = (opnameProduct.final_stock || 0) + 1

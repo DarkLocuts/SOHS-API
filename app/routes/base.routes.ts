@@ -38,6 +38,7 @@ export const routes = (app: Elysia) => app.group('/api', (route) => {
     api(route, "/opnames", OpnameController);
     route.put('/opnames/:id/cancel', OpnameController.cancel);
     route.get('/opnames/:id/products', OpnameController.getProducts);
+    route.get('/opnames/:id/product-labels', OpnameController.getProductLabels);
     route.get('/opnames/:id/labels', OpnameController.getLabels);
     route.post('/opnames/:id/labels', OpnameController.addLabels);
     route.get('/opnames/:id/locations', OpnameController.getLocations);

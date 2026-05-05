@@ -7,7 +7,7 @@
 
 
 import { Model, SoftDelete, Field, HasMany, BelongsTo } from '@utils'
-import { OpnameProduct, OpnameProductLabel, User } from '@models'
+import { OpnameBrand, OpnameProduct, OpnameProductLabel, User } from '@models'
 
 export class Opname extends Model {
     // =====================>
@@ -49,6 +49,9 @@ export class Opname extends Model {
     // =========================>
     @HasMany(() => OpnameProduct)
     products!: OpnameProduct[]
+
+    @HasMany(() => OpnameBrand)
+    brands!: OpnameBrand[]
 
     @HasMany(() => OpnameProductLabel)
     labels!: OpnameProductLabel[]

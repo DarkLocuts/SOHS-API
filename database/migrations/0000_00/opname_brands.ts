@@ -9,14 +9,12 @@
 import type { Knex } from "knex"
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.schema.createTable("opname_product_labels", (table) => {
+  await knex.schema.createTable("opname_brands", (table) => {
     table.bigIncrements('id').primary()
     table.foreignIdFor("opnames")
-    table.foreignIdFor("opname_products")
-    table.foreignIdFor("products")
-    table.foreignIdFor("product_labels")
-    table.foreignIdFor("locations")
-    table.foreignIdFor("users")
+    table.foreignIdFor("brands")
+    table.integer("total_product")
+    table.integer("total_stock")
     table.timestamps(true, true)
     table.softDelete()
   })

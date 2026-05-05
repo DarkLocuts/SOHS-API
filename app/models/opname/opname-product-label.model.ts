@@ -7,7 +7,7 @@
 
 
 import { Model, SoftDelete, Field, BelongsTo } from '@utils'
-import { Opname, OpnameProduct, Product, ProductLabel, Location } from '@models'
+import { Opname, OpnameProduct, Product, ProductLabel, Location, User } from '@models'
 
 export class OpnameProductLabel extends Model {
     // =====================>
@@ -41,6 +41,10 @@ export class OpnameProductLabel extends Model {
     location_id!: number | null
     @BelongsTo(() => Location)
     location!: Location
+
+    user_id!: number
+    @BelongsTo(() => User)
+    user!: User
 
 
     // =====================>
