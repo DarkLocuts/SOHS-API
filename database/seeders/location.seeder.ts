@@ -8,6 +8,6 @@ export default async function LocationSeeder() {
     
     await (new Location).pump([
         { "name": "Ruang A", "code": "SOHSL/RUANGA" },
-        { "name": "Ruang B", "code": "SOHSL/RUANGB" },
+        // { "name": "Ruang B", "code": "SOHSL/RUANGB" },
     ]);
 }
